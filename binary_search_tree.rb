@@ -1,23 +1,56 @@
-#
-class BinarySearchTree
-  attr_accessor :root
+# frozen_string_literal: true
 
-  def initialize(node)
-    @root = node
+class Tree
+  attr_accessor :root, :data
+
+  def initialize(arr)
+    @data = arr.sort.uniq
+    @root = build_tree(data)
+  end
+
+  # transforms data into balanced binary tree with nodes properly positioned.
+  # returns the root node.
+  def build_tree(arr)
+    return nil if arr.empty?
+
+    middle = (arr.size - 1) / 2
+    root_node = Node.new(arr[middle])
+
+    root_node.left = build_tree(arr[0...middle])
+    root_node.right = build_tree(arr[(middle + 1)..-1])
+
+    root_node
+  end
+
+  # search within tree for provided value
+  def find(value)
+    return true if root.value == value
+
+    find_helper(root, value)
+  end
+
+  def find_helper(node, value)
+    return if node.nil?
+
+    return true if node.value == value
+
+    found = find_helper(node.left, value)
+    return found if found == true
+
+    find_helper(node.right, value)
   end
 end
 
 class Node
-  attr_accessor :left, :right, :value
+  attr_accessor :left, :right, :data
 
-  def initialize(left = nil, right = nil, value = nil)
-    @left = left
-    @right = right
-    @value = value
+  def initialize(data)
+    @data = data
+    @left = nil
+    @right = nil
   end
 end
 
-test = BinarySearchTree.new(Node.new(2, 5, 3))
-puts test.root.left
-puts test.root.right
-puts test.root.value
+arr = Array.new(10) { rand(1..100) }
+bst = Tree.new(arr)
+puts bst.root.data
