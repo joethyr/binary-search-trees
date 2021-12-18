@@ -22,6 +22,17 @@ class Tree
     root_node
   end
 
+  def insert(value, node = root)
+    return node if value == node.data
+
+    if value < node.data
+      node.left.nil? ? node.left = Node.new(value) : insert(value, node.left)
+    else
+      node.right.nil? ? node.right = Node.new(value) : insert(value, node.right)
+    end
+    node
+  end
+
   # search within tree for provided value
   def find(value)
     return true if root.value == value
@@ -54,3 +65,4 @@ end
 arr = Array.new(10) { rand(1..100) }
 bst = Tree.new(arr)
 puts bst.root.data
+bst.insert(45)
