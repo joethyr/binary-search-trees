@@ -74,6 +74,15 @@ class Tree
 
     find_helper(node.right, value)
   end
+
+  def level_order(node = root, queue = [])
+    puts "#{node.data}"
+    queue << node.left unless node.left.nil?
+    queue << node.right unless node.right.nil?
+    return if queue.empty?
+
+    level_order(queue.shift, queue)
+  end
 end
 
 class Node
@@ -90,3 +99,4 @@ arr = Array.new(10) { rand(1..100) }
 bst = Tree.new(arr)
 puts bst.root.data
 bst.insert(45)
+bst.level_order
