@@ -33,6 +33,30 @@ class Tree
     node
   end
 
+  def delete(value, node = root)
+    return node if node.nil?
+
+    if value < node.data
+      node.left = delete(value, node.left)
+    elsif value > node.data
+      node.right = delete(value, node.right)
+    else
+      return node.left if node.left.nil?
+      return node.right if node.right.nil?
+
+      leftmost_node = leftomost_leaf(node.right)
+      node.data = leftmost_node.data
+      node.right = delete(leftmost_node.data, node.right)
+    end
+    node
+  end
+
+  def leftmost_leaf(node)
+    node = node.left until node.left.nil?
+
+    node
+  end
+
   # search within tree for provided value
   def find(value)
     return true if root.value == value
